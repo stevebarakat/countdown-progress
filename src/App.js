@@ -1,23 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+import CountDownTimer from "./components/CountDownTimer";
+import "./App.css";
 
-function App() {
+const ONE_MIN_IN_MS = 60 * 1000;
+
+function App(props) {
+  const startDate = new Date().getTime();
+  const timeInOneHour = startDate + ONE_MIN_IN_MS;
+  const [targetDate, setTargetDate] = useState(new Date(timeInOneHour));
+
+  const handleChange = (e) => {
+    e.preventDefault();
+    if (e.target.value) {
+      setTargetDate(new Date(e.target.value));
+    } else {
+      setTargetDate(new Date(timeInOneHour));
+    }
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="countdown-container">
+      <form>
+        <label htmlFor="countdown-date-time">Set target date:</label>
+        <input
+          id="countdown-date-time"
+          name="countdown-date-time"
+          type="datetime-local"
+          onChange={handleChange}
+        />
+      </form>
+      <CountDownTimer targetDate={targetDate} startDate={startDate} />
     </div>
   );
 }
